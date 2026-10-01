@@ -37,3 +37,7 @@ dist-ssr
 
 # playwright-cli 세션 산출물
 .playwright-cli/
+
+# 스킬 평가 산출물(skill-creator)과 Python 캐시
+.claude/skills/*-workspace/
+__pycache__/

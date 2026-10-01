@@ -72,3 +72,32 @@ describe('PromptInput', () => {
     expect(screen.getByText('6 / 500자')).toBeInTheDocument();
   });
 });
+
+describe('PromptInput 프롬프트 히스토리', () => {
+  it('최근 프롬프트를 누르면 입력란에 채운다', async () => {
+    const user = userEvent.setup();
+    render(<PromptInput onGenerate={vi.fn()} isLoading={false} history={['요금제 카드', '검색 필터']} />);
+
+    await user.click(screen.getByRole('button', { name: '검색 필터' }));
+
+    expect(screen.getByRole('textbox')).toHaveValue('검색 필터');
+  });
+
+  it('히스토리가 없으면 최근 프롬프트 영역을 표시하지 않는다', () => {
+    render(<PromptInput onGenerate={vi.fn()} isLoading={false} history={[]} />);
+
+    expect(screen.queryByRole('heading', { name: '최근 프롬프트' })).not.toBeInTheDocument();
+  });
+
+  it('기록 지우기를 누르면 onClearHistory를 호출한다', async () => {
+    const onClearHistory = vi.fn();
+    const user = userEvent.setup();
+    render(
+      <PromptInput onGenerate={vi.fn()} isLoading={false} history={['카드']} onClearHistory={onClearHistory} />,
+    );
+
+    await user.click(screen.getByRole('button', { name: '기록 지우기' }));
+
+    expect(onClearHistory).toHaveBeenCalledTimes(1);
+  });
+});
