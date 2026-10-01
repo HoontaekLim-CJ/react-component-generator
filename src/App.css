@@ -181,6 +181,21 @@
   outline-offset: 0;
 }
 
+.prompt-textarea[aria-invalid='true'] {
+  border-color: var(--redline);
+  box-shadow: inset 4px 0 0 var(--redline);
+}
+
+.prompt-textarea[aria-invalid='true']:focus-visible {
+  outline-color: var(--redline);
+}
+
+.prompt-error {
+  color: var(--redline);
+  font-size: 14px;
+  font-weight: 500;
+}
+
 .prompt-submit {
   display: flex;
   justify-content: flex-end;
@@ -191,6 +206,18 @@
 .prompt-hint {
   color: var(--ink-soft);
   font-size: 14px;
+}
+
+.prompt-count {
+  margin-right: auto;
+  color: var(--ink-soft);
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+}
+
+.prompt-count--over {
+  color: var(--redline);
+  font-weight: 600;
 }
 
 .btn-generate {
@@ -683,8 +710,11 @@
   }
 
   .prompt-submit {
-    flex-direction: column-reverse;
-    align-items: stretch;
+    flex-wrap: wrap;
+  }
+
+  .btn-generate {
+    flex: 1 0 100%;
   }
 
   .prompt-hint {

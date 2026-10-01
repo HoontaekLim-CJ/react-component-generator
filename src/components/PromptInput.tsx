@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { validatePrompt, PROMPT_MAX_LENGTH } from '../utils/validatePrompt';
 
 interface PromptInputProps {
   onGenerate: (prompt: string) => void;
@@ -16,10 +17,13 @@ const EXAMPLES = [
 
 export function PromptInput({ onGenerate, isLoading }: PromptInputProps) {
   const [prompt, setPrompt] = useState('');
+  const validation = validatePrompt(prompt);
+  const isTooLong = validation.error === 'tooLong';
+  const overBy = validation.length - PROMPT_MAX_LENGTH;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (prompt.trim() && !isLoading) {
+    if (validation.valid && !isLoading) {
       onGenerate(prompt.trim());
     }
   };
@@ -37,18 +41,28 @@ export function PromptInput({ onGenerate, isLoading }: PromptInputProps) {
           placeholder="예: 고객 목록 테이블 위에 들어갈 검색 필터 바. 상태, 담당자, 날짜 범위 필터가 필요해요."
           className="prompt-textarea"
           rows={3}
+          aria-invalid={isTooLong}
+          aria-describedby={isTooLong ? 'prompt-error' : undefined}
           onKeyDown={(e) => {
             if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
               handleSubmit(e);
             }
           }}
         />
+        {isTooLong && (
+          <p id="prompt-error" className="prompt-error">
+            {PROMPT_MAX_LENGTH}자 이하로 줄여 주세요. {overBy}자를 더 지워야 합니다.
+          </p>
+        )}
         <div className="prompt-submit">
+          <span className={`prompt-count ${isTooLong ? 'prompt-count--over' : ''}`}>
+            {validation.length} / {PROMPT_MAX_LENGTH}자
+          </span>
           <span className="prompt-hint">Ctrl + Enter로도 생성할 수 있어요</span>
           <button
             type="submit"
             className="btn-generate"
-            disabled={!prompt.trim() || isLoading}
+            disabled={!validation.valid || isLoading}
           >
             {isLoading ? '생성 중...' : '컴포넌트 생성'}
           </button>
