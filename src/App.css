@@ -252,8 +252,35 @@
   cursor: not-allowed;
 }
 
+.prompt-history,
 .prompt-examples {
   margin-top: 28px;
+}
+
+.prompt-history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+
+.prompt-history-header .examples-label {
+  margin-bottom: 0;
+}
+
+.btn-text {
+  padding: 2px 0;
+  background: none;
+  border: 0;
+  color: var(--ink-soft);
+  cursor: pointer;
+  font-size: 14px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.btn-text:hover {
+  color: var(--redline);
 }
 
 .examples-label {
@@ -263,6 +290,7 @@
   font-weight: 500;
 }
 
+.prompt-history ul,
 .prompt-examples ul {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -271,6 +299,7 @@
   border-top: 1px solid var(--nonphoto);
 }
 
+.prompt-history li,
 .prompt-examples li {
   border-bottom: 1px solid var(--nonphoto);
 }
@@ -721,6 +750,7 @@
     display: none;
   }
 
+  .prompt-history ul,
   .prompt-examples ul {
     grid-template-columns: 1fr;
   }

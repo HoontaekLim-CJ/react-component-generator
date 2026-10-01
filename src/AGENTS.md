@@ -8,7 +8,9 @@ React 19 UI that sends prompts to `/api/generate`, keeps generated components in
 
 - Only runtime dependencies are `react`, `react-dom`, and `react-live` (package.json). No CSS framework, router, or state library; plain CSS in `src/App.css` and `src/index.css`.
 - Call the API with relative paths (`/api/...`, src/hooks/useComponentGenerator.ts:23). Never hardcode `http://localhost:3002`.
-- Generated components are kept only in hook state; there is no persistence by design.
+- Provider, prompt history, and generated components persist in localStorage via `usePersistentState` (src/hooks/usePersistentState.ts). Keys live only in `STORAGE_KEYS` (src/utils/persisted.ts); add new keys there.
+- Every persisted value is read through a `parse*` validator in src/utils/persisted.ts that drops malformed entries. New persisted state needs its own validator; never cast `loadJSON` output directly.
+- The API key is intentionally not persisted: generated code runs in this same origin (react-live) and could read localStorage. Use the server `.env` key instead.
 
 ## Implementation Patterns
 
